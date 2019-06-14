@@ -3,10 +3,13 @@ import os
 import sys
 import fileinput
 from functools import reduce
+import requests
+
 
 id = 0
+URL = 'https://wwwinfo.mfcr.cz/cgi-bin/ares/xar.cgi'
+MAX_REQUESTS = 50
 
-MAX_DOTAZ_COUNT = 50
 
 def ico_dotaz(ico):
     global id
@@ -15,7 +18,7 @@ def ico_dotaz(ico):
     <Dotaz>
         <Pomocne_ID>{id}</Pomocne_ID>
         <Klicove_polozky>
-            <ICO>{ico.strip()}</ICO>
+            <ICO>{ico.replace('CZ','',2).strip()}</ICO>
         </Klicove_polozky>
         <Max_pocet>10</Max_pocet>
     </Dotaz>
@@ -32,8 +35,19 @@ def envelope(dotazy):
         </Ares_dotazy>
     """
 
+# def check_status(status)
+#     response = requests.get(URL)
+# if  response:
+#     make_http_request
+# else:
+#      print('Response Error')
+
+
+
+
 def make_http_request(http_body):
-    pass
+print(AHOJ)
+
 
 def parse_http_response(resp):
     pass
