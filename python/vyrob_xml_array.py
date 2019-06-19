@@ -2,29 +2,30 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-
+import re
+id = 0
 def fix_ico_format(ico):
     return ico.replace('CZ','').strip()
     
+def is_valid_ico(ico):
+    return len(ico) == 8
 
 def divide_chunk(l, n):
     for i in range(0, len(l), n):
         yield l[i : i + n]
 
-id = 0
-
 def ico_dotaz(ico):
-    global id
-    id += 1
+    fixed_ico = fix_ico_format(ico)
     return f"""
     <Dotaz>
-        <Pomocne_ID>{id}</Pomocne_ID>
+        <Pomocne_ID>{fixed_ico}</Pomocne_ID>
         <Klicove_polozky>
-            <ICO>{fix_ico_format(ico)}</ICO>
+            <ICO>{fixed_ico}</ICO>
         </Klicove_polozky>
         <Max_pocet>10</Max_pocet>
     </Dotaz>
 """
+
 def join_dotaz(l):
     return "".join(l)
 
@@ -38,6 +39,12 @@ def create_soapbody(dotazy):
 
 with open('ico.txt') as f:
     content = f.readlines()
+    content = list(map(fix_ico_format,content))
+    invalid_icos = '\n'.join([ico for ico in content if not is_valid_ico(ico)])
+    print('INVALID ICOS')
+    print(invalid_icos)
+
+    content = [ico for ico in content if is_valid_ico(ico)]
     content = list(map(ico_dotaz,content))
     content = divide_chunk(content, 100)
     content = map(join_dotaz,content)
